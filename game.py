@@ -12,13 +12,16 @@ class game (Board):
             userIn = input("What difficulty would you prefer?\n1. Easy\n2.Medium\n3.Hard\n")
             if str(userIn) == "1" or userIn.lower == "easy":
                 gameDifficulty = 1
-                Board.startGame(5, 5)
+                gameBoard = Board(5, 5)
+                gameBoard.printBoard()
             elif str(userIn) == "2" or userIn.lower == "medium":
                 gameDifficulty = 2
-                Board.startGame(7, 5)
+                gameBoard = Board(7, 5)
+                gameBoard.printBoard()
             elif str(userIn) == "3" or userIn.lower == "hard":
                 gameDifficulty = 3
-                Board.startGame(12, 5)
+                gameBoard = Board(12, 5)
+                gameBoard.printBoard()
             else:
                 print("Invalid Input")
                 game.play()
@@ -32,19 +35,11 @@ class game (Board):
             if len(userIn) != 2:
                 print ("Invalid move, only enter a number for each row/column")
             else:
-                x = userIn[0]
-                y = userIn[1]
+                # TODO: add the catch here for data type/unable to cast
+                x = int(userIn[0])
+                y = int(userIn[1])
 
-                # Make sure the input is valid and make the move
-                try:
-                    int(x)
-                    int(y)
-                    # The issue is with this function call, specifically with the number of params
-                    # for some reason it is requiring 3 even tho one of the 3 is 'self'
-                    # squareValue = Board.pickSquare(x, y)
-                except:
-                    print(str(x) + str(y))
-                    print("Invalid move, only enter a number for each row/column")
+                squareValue = gameBoard.pickSquare(x, y)
             
             # Check if the move ended the game or not
             if squareValue == "clear":

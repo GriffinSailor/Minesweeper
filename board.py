@@ -36,11 +36,8 @@ class Board(Square):
         elif self.board[col][row].value == 10:
             return "bomb"
         else:
+
+            # TODO: the printboard here throws an error saying its missing a parameter
             self.board[col][row].revealed = True
             self.printBoard()
             return "clear"
-    
-    # Begin new game
-    def startGame(bombCount, boardSize):
-        gameBoard = Board(bombCount, boardSize)
-        gameBoard.printBoard()
