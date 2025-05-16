@@ -25,23 +25,32 @@ class game (Board):
 
         # Make moves
         while activeGame:
+            squareValue = "blank"
             userIn = input("Pick a square to try to reveal (use the format x,y):\n")
             userIn = userIn.replace(" ", "",)
             userIn = userIn.replace(",", "",)
-            x = userIn[0]
-            y = userIn[1]
+            if len(userIn) != 2:
+                print ("Invalid move, only enter a number for each row/column")
+            else:
+                x = userIn[0]
+                y = userIn[1]
 
-            # Make sure the input is valid and make the move
-            try:
-                int(x)
-                int(y)
-                activeGame = Board.pickSquare()
-            except:
-                print("Invalid move, only enter a number for each row/column")
+                # Make sure the input is valid and make the move
+                try:
+                    int(x)
+                    int(y)
+                    # The issue is with this function call, specifically with the number of params
+                    # for some reason it is requiring 3 even tho one of the 3 is 'self'
+                    # squareValue = Board.pickSquare(x, y)
+                except:
+                    print(str(x) + str(y))
+                    print("Invalid move, only enter a number for each row/column")
+            
+            # Check if the move ended the game or not
+            if squareValue == "clear":
+                Board.printBoard()
+            elif squareValue == "bomb":
+                print(" " * 5 + "BOOM!!!\nYou Lose!")
             
 # Play game!
 game.play()
-
-# TODO: make sure the printboard function has proper spacing, and is called when appropriate 
-# (like in the while loop that collects moves), also debug the code that deconstructs the users string
-# to make sure the moves are taken in properly
