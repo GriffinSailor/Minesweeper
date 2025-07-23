@@ -20,7 +20,7 @@ class Board(Square):
     def printBoard(self):
         print()
         for i in range (len(self.board)):
-            print(str(self.boardSize - i) + "|" + " " * 2, end = "")
+            print(str(self.boardSize - i) + ("|" if self.boardSize - i > 9 else " |") + " " * 2 , end = "")
             for k in range (len(self.board)):
                 if self.board[i][k].revealed == False:
                     print("x" + " " * 2, end = "")
@@ -28,9 +28,11 @@ class Board(Square):
                     print(str(self.board[i][k].value ) + " " * 2, end = "")
             print()
         
-        # TODO: turn this into a bit of code that can change the number of prints based off difficulty
-        print(" " * 3 + "_" * 15)
-        print(" " * 4 + "1" + " " * 2 + "2" + " " * 2 + "3" + " " * 2 + "4" + " " * 2 + "5")
+        # TODO: fix the issue where it only prints the 5 digits for the columns
+        print(" " * 4 + "_" * (self.boardSize * 3))
+        print(" " * 3, end = "")
+        for i in range (self.boardSize):
+            print ((" " * 2 if i < 10 else " ") + str(i + 1), end = "")
         print() 
 
     # Select a square to expose

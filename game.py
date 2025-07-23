@@ -9,18 +9,18 @@ class game (Board):
 
         # Create the board
         while gameDifficulty == 0:
-            userIn = input("What difficulty would you prefer?\n1. Easy\n2.Medium\n3.Hard\n")
+            userIn = input("What difficulty would you prefer?\n1. Easy\n2. Medium\n3. Hard\n")
             if str(userIn) == "1" or userIn.lower == "easy":
                 gameDifficulty = 1
-                gameBoard = Board(5, 5)
+                gameBoard = Board(5, 10)
                 gameBoard.printBoard()
             elif str(userIn) == "2" or userIn.lower == "medium":
                 gameDifficulty = 2
-                gameBoard = Board(7, 5)
+                gameBoard = Board(7, 10)
                 gameBoard.printBoard()
             elif str(userIn) == "3" or userIn.lower == "hard":
                 gameDifficulty = 3
-                gameBoard = Board(12, 5)
+                gameBoard = Board(12, 15)
                 gameBoard.printBoard()
             else:
                 print("Invalid Input")
@@ -36,6 +36,7 @@ class game (Board):
                 print ("Invalid move, only enter a number for each row/column")
             else:
                 # TODO: add the catch here for data type/unable to cast/one of the values is out of range
+                # TODO: make the filter more strict and require a comma to allow for 2 digit x's and y's
                 # The minus five and swapped x/y is to facilitate how the 2d arrays cordinates are handled
                 x = int(userIn[0]) - 1
                 y = gameBoard.boardSize - int(userIn[1])
