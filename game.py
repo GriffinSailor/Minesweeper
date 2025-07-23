@@ -29,21 +29,21 @@ class game (Board):
         # Make moves
         while activeGame:
             squareValue = "blank"
-            userIn = input("Pick a square to try to reveal (use the format x,y):\n")
+            userIn = input("Pick a square to try to reveal with the format 'x,y':\n")
             userIn = userIn.replace(" ", "",)
             userIn = userIn.replace(",", "",)
             if len(userIn) != 2:
                 print ("Invalid move, only enter a number for each row/column")
             else:
-                # TODO: add the catch here for data type/unable to cast
-                x = int(userIn[0])
-                y = int(userIn[1])
-
-                squareValue = gameBoard.pickSquare(x, y)
+                # TODO: add the catch here for data type/unable to cast/one of the values is out of range
+                # The minus five and swapped x/y is to facilitate how the 2d arrays cordinates are handled
+                x = int(userIn[0]) - 1
+                y = gameBoard.boardSize - int(userIn[1])
+                squareValue = gameBoard.pickSquare(y, x)
             
             # Check if the move ended the game or not
             if squareValue == "clear":
-                Board.printBoard()
+                gameBoard.printBoard()
             elif squareValue == "bomb":
                 print(" " * 5 + "BOOM!!!\nYou Lose!")
             
