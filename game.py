@@ -12,15 +12,15 @@ class game (Board):
             userIn = input("What difficulty would you prefer?\n1. Easy\n2. Medium\n3. Hard\n")
             if str(userIn) == "1" or userIn.lower == "easy":
                 gameDifficulty = 1
-                gameBoard = Board(5, 10)
+                gameBoard = Board(10, 10)
                 gameBoard.printBoard()
             elif str(userIn) == "2" or userIn.lower == "medium":
                 gameDifficulty = 2
-                gameBoard = Board(7, 10)
+                gameBoard = Board(40, 15)
                 gameBoard.printBoard()
             elif str(userIn) == "3" or userIn.lower == "hard":
                 gameDifficulty = 3
-                gameBoard = Board(12, 15)
+                gameBoard = Board(99, 24)
                 gameBoard.printBoard()
             else:
                 print("Invalid Input")

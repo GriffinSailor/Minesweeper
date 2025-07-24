@@ -1,4 +1,5 @@
 from square import Square
+import random
 
 class Board(Square):
 
@@ -8,13 +9,22 @@ class Board(Square):
         self.boardSize = boardSize
         self.board = []
 
-        # TODO: create an array of randomly selected cordinates within range of the board size
-        # then set that coordinate to a bomb in the loop below if the current value being set is within the array
+        bombLocations = []
+        while len(bombLocations) != bombCount:
+            x = random.randrange(0, boardSize)
+            y = random.randrange(0, boardSize)
+            
+            if (x,y) not in bombLocations:
+                bombLocations.append(tuple((x, y)))
 
         for i in range (boardSize):
             self.board.append([])
             for k in range (boardSize):
-                self.board[i].append(Square(1, False))
+                # currCordinate = (k, i)
+                if (k, i) in bombLocations:
+                    self.board[i].append(Square(9, False))
+                else:
+                    self.board[i].append(Square(1, False))
 
     # Display the board to the user with appropriate square values
     def printBoard(self):
@@ -37,9 +47,11 @@ class Board(Square):
 
     # Select a square to expose
     def pickSquare(self, col, row):
-        if self.board[col][row].revealed == True:
-            return "clear"
-        elif self.board[col][row].value == 10:
+        if self.board[col][row].value == 9:
+            for i in range (self.boardSize):
+                for k in range (self.boardSize):
+                    self.board[i][k]. revealed = True
+
             return "bomb"
         else:
             self.board[col][row].revealed = True
