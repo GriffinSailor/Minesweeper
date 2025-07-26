@@ -15,7 +15,7 @@ class Board(Square):
             for k in range (boardSize):
                 self.board[i].append(Square(0, False))
 
-        # Pre-determine the bomb locations
+        # Determine the bomb locations
         bombLocations = []
         while len(bombLocations) != bombCount:
             x = random.randrange(0, boardSize)
@@ -24,18 +24,38 @@ class Board(Square):
             if (x,y) not in bombLocations:
                 bombLocations.append(tuple((x, y)))
 
-        # Set the bomb locations on the board
+        # Set the bomb locations
         for i in range (len(bombLocations)):
             cordinate = bombLocations[i]
             x = cordinate[0]
             y = cordinate[1]
             self.board[y][x].value = 9
 
-        # Set the values for all other squares
-        for i in range (boardSize):
-            for k in range (boardSize):
-                self.board[i][k]
-                test = 1
+            # Increment the values of all squares touching the bomb
+            if x + 1 <= boardSize - 1:
+                if self.board[y][x + 1].value != 9:
+                    self.board[y][x + 1].value += 1
+                if y + 1 <= boardSize - 1:
+                    if self.board[y + 1][x + 1].value != 9:
+                        self.board[y + 1][x + 1].value += 1
+                if y - 1 >= 0:
+                    if self.board[y - 1][x + 1].value != 9:
+                        self.board[y - 1][x + 1].value += 1
+            if x - 1 >= 0:
+                if self.board[y][x - 1].value != 9:
+                    self.board[y][x - 1].value += 1
+                if y + 1 <= boardSize - 1:
+                    if self.board[y + 1][x - 1].value != 9:
+                        self.board[y + 1][x - 1].value += 1
+                if y - 1 >= 0:
+                    if self.board[y - 1][x - 1].value != 9:
+                        self.board[y - 1][x - 1].value += 1
+            if y - 1 >= 0:
+                if self.board[y - 1][x].value != 9:
+                    self.board[y - 1][x].value += 1
+            if y + 1 <= boardSize - 1:
+                if self.board[y + 1][x].value != 9:
+                    self.board[y + 1][x].value += 1
 
     # Display the board to the user with appropriate square values
     def printBoard(self):
