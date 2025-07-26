@@ -9,6 +9,13 @@ class Board(Square):
         self.boardSize = boardSize
         self.board = []
 
+        # Initialize the board
+        for i in range (boardSize):
+            self.board.append([])
+            for k in range (boardSize):
+                self.board[i].append(Square(0, False))
+
+        # Pre-determine the bomb locations
         bombLocations = []
         while len(bombLocations) != bombCount:
             x = random.randrange(0, boardSize)
@@ -17,14 +24,18 @@ class Board(Square):
             if (x,y) not in bombLocations:
                 bombLocations.append(tuple((x, y)))
 
+        # Set the bomb locations on the board
+        for i in range (len(bombLocations)):
+            cordinate = bombLocations[i]
+            x = cordinate[0]
+            y = cordinate[1]
+            self.board[y][x].value = 9
+
+        # Set the values for all other squares
         for i in range (boardSize):
-            self.board.append([])
             for k in range (boardSize):
-                # currCordinate = (k, i)
-                if (k, i) in bombLocations:
-                    self.board[i].append(Square(9, False))
-                else:
-                    self.board[i].append(Square(1, False))
+                self.board[i][k]
+                test = 1
 
     # Display the board to the user with appropriate square values
     def printBoard(self):
@@ -38,7 +49,6 @@ class Board(Square):
                     print(str(self.board[i][k].value ) + " " * 2, end = "")
             print()
         
-        # TODO: fix the issue where it only prints the 5 digits for the columns
         print(" " * 4 + "_" * (self.boardSize * 3))
         print(" " * 3, end = "")
         for i in range (self.boardSize):
@@ -50,7 +60,7 @@ class Board(Square):
         if self.board[col][row].value == 9:
             for i in range (self.boardSize):
                 for k in range (self.boardSize):
-                    self.board[i][k]. revealed = True
+                    self.board[i][k].revealed = True
 
             return "bomb"
         else:
