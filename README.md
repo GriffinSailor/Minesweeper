@@ -1,5 +1,5 @@
 # Minesweeper
-The classic game, with difficulty levels designed after the google difficulty standard
+The classic game with difficulty levels designed after the google difficulty standard
 
 ## Current Status
   The game is essentially finished. The user is able to play the game in full through the terminal with fleshed out difficulty options.
