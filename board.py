@@ -4,7 +4,7 @@ import random
 class Board(Square):
 
     # Constructor that determines the boards difficulty and builds it
-    def __init__(self, bombCount, boardSize):
+    def __init__(self, bombCount, boardSize, blockedX, blockedY):
         self.bombCount = bombCount
         self.boardSize = boardSize
         self.board = []
@@ -21,7 +21,7 @@ class Board(Square):
             x = random.randrange(0, boardSize)
             y = random.randrange(0, boardSize)
             
-            if (x,y) not in bombLocations:
+            if (x,y) not in bombLocations and not (x == blockedX and y == blockedY):
                 bombLocations.append(tuple((x, y)))
 
         # Set the bomb locations
