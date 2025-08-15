@@ -2,7 +2,7 @@ from board import Board
 
 class game (Board):
 
-    # Collect the users first move and generate the board afterwards to avoid an immediate game over
+    # Collect the users first move and generate the board afterwards to ensure a fair start
     def makeFirstMove(boardSize, bombCount, firstMove):
             # Printing an empty board
             print()

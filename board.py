@@ -21,7 +21,12 @@ class Board(Square):
             x = random.randrange(0, boardSize)
             y = random.randrange(0, boardSize)
             
-            if (x,y) not in bombLocations and not (x == blockedX and y == blockedY):
+            # Ensure the first move is a 0 square to ensure a fair start to the game
+            if (x,y) not in bombLocations and not (x == blockedX and y == blockedY) \
+                and not (x == blockedX + 1 and y == blockedY) and not (x == blockedX + 1 and y == blockedY + 1) \
+                and not (x == blockedX + 1 and y == blockedY - 1) and not (x == blockedX and y == blockedY + 1) \
+                and not (x == blockedX - 1 and y == blockedY) and not (x == blockedX and y == blockedY - 1) \
+                and not (x == blockedX - 1 and y == blockedY + 1) and not (x == blockedX - 1 and y == blockedY - 1):
                 bombLocations.append(tuple((x, y)))
 
         # Set the bomb locations
@@ -74,6 +79,52 @@ class Board(Square):
         for i in range (self.boardSize):
             print ((" " * 2 if i < 10 else " ") + str(i + 1), end = "")
         print() 
+    
+    # Reveal all squares around a sepcified coordinate and return a list of the ones that are 0 values
+    @staticmethod
+    def revealBlock(x, y, self, zeroesList):
+        # x and y + 1
+        if y + 1 <= self.boardSize - 1:
+            self.board[x][y + 1].revealed = True
+            if self.board[x][y + 1].value == 0:
+                zeroesList.append(tuple((x, y + 1)))
+        # x and y - 1
+        if y - 1 >= 0:
+            self.board[x][y - 1].revealed = True
+            if self.board[x][y - 1].value == 0:
+                zeroesList.append(tuple((x, y - 1)))
+        # x + 1 and y + 1
+        if x + 1 <= self.boardSize - 1 and y + 1 <= self.boardSize - 1:
+            self.board[x + 1][y + 1].revealed = True
+            if self.board[x + 1][y + 1].value == 0:
+                zeroesList.append(tuple((x + 1, y + 1)))
+        # x + 1 and y - 1
+        if x + 1 <= self.boardSize - 1 and y - 1 >= 0:
+            self.board[x + 1][y - 1].revealed = True
+            if self.board[x + 1][y - 1].value == 0:
+                zeroesList.append(tuple((x + 1, y - 1)))
+        # x + 1 and y
+        if x + 1 <= self.boardSize - 1:
+            self.board[x + 1][y].revealed = True
+            if self.board[x + 1][y].value == 0:
+                zeroesList.append(tuple((x + 1, y)))
+        # x - 1 and y + 1
+        if x - 1 >= 0 and y + 1 <= self.boardSize - 1:
+            self.board[x - 1][y + 1].revealed = True
+            if self.board[x - 1][y + 1].value == 0:
+                zeroesList.append(tuple((x - 1, y + 1)))
+        # x - 1 and y - 1
+        if x - 1 >= 0 and y - 1 >= 0:
+            self.board[x - 1][y - 1].revealed = True
+            if self.board[x - 1][y - 1].value == 0:
+                zeroesList.append(tuple((x - 1, y - 1)))
+        # x - 1 and y
+        if x - 1 >= 0:
+            self.board[x - 1][y].revealed = True
+            if self.board[x - 1][y].value == 0:
+                zeroesList.append(tuple((x - 1, y)))
+        
+        return zeroesList
 
     # Select a square to expose
     def pickSquare(self, col, row):
@@ -81,8 +132,21 @@ class Board(Square):
             for i in range (self.boardSize):
                 for k in range (self.boardSize):
                     self.board[i][k].revealed = True
-
             return "bomb"
+        elif self.board[col][row].value == 0:
+            # Reveal all connecting 0 squares
+            self.board[col][row].revealed = True
+            
+            zeroesList = []
+            moreZeroes = True
+            while moreZeroes:
+                listSize = len(zeroesList)
+                # TODO: figure out why this function call isnt being recognized
+                zeroesList = revealBlock(col, row, self, zeroesList)
+
+                moreZeroes = (listSize == len(zeroesList))
+
+            return "clear"
         else:
             self.board[col][row].revealed = True
             return "clear"
