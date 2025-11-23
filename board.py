@@ -86,42 +86,42 @@ class Board(Square):
         # x and y + 1
         if y + 1 <= self.boardSize - 1:
             self.board[x][y + 1].revealed = True
-            if self.board[x][y + 1].value == 0:
+            if self.board[x][y + 1].value == 0 and self.board[x][y + 1].revealed == False:
                 zeroesList.append(tuple((x, y + 1)))
         # x and y - 1
         if y - 1 >= 0:
             self.board[x][y - 1].revealed = True
-            if self.board[x][y - 1].value == 0:
+            if self.board[x][y - 1].value == 0 and self.board[x][y - 1].revealed == False:
                 zeroesList.append(tuple((x, y - 1)))
         # x + 1 and y + 1
         if x + 1 <= self.boardSize - 1 and y + 1 <= self.boardSize - 1:
             self.board[x + 1][y + 1].revealed = True
-            if self.board[x + 1][y + 1].value == 0:
+            if self.board[x + 1][y + 1].value == 0 and self.board[x + 1][y + 1].revealed == False:
                 zeroesList.append(tuple((x + 1, y + 1)))
         # x + 1 and y - 1
         if x + 1 <= self.boardSize - 1 and y - 1 >= 0:
             self.board[x + 1][y - 1].revealed = True
-            if self.board[x + 1][y - 1].value == 0:
+            if self.board[x + 1][y - 1].value == 0 and self.board[x + 1][y - 1].revealed == False:
                 zeroesList.append(tuple((x + 1, y - 1)))
         # x + 1 and y
         if x + 1 <= self.boardSize - 1:
             self.board[x + 1][y].revealed = True
-            if self.board[x + 1][y].value == 0:
+            if self.board[x + 1][y].value == 0 and self.board[x + 1][y].revealed == False:
                 zeroesList.append(tuple((x + 1, y)))
         # x - 1 and y + 1
         if x - 1 >= 0 and y + 1 <= self.boardSize - 1:
             self.board[x - 1][y + 1].revealed = True
-            if self.board[x - 1][y + 1].value == 0:
+            if self.board[x - 1][y + 1].value == 0 and self.board[x - 1][y + 1].revealed == False:
                 zeroesList.append(tuple((x - 1, y + 1)))
         # x - 1 and y - 1
         if x - 1 >= 0 and y - 1 >= 0:
             self.board[x - 1][y - 1].revealed = True
-            if self.board[x - 1][y - 1].value == 0:
+            if self.board[x - 1][y - 1].value == 0 and self.board[x - 1][y - 1].revealed == False:
                 zeroesList.append(tuple((x - 1, y - 1)))
         # x - 1 and y
         if x - 1 >= 0:
             self.board[x - 1][y].revealed = True
-            if self.board[x - 1][y].value == 0:
+            if self.board[x - 1][y].value == 0 and self.board[x - 1][y].revealed == False:
                 zeroesList.append(tuple((x - 1, y)))
         
         return zeroesList
@@ -143,7 +143,7 @@ class Board(Square):
                 listSize = len(zeroesList)
                 # TODO: figure out why this function call isnt being recognized
                 zeroesList = revealBlock(col, row, self, zeroesList)
-
+                
                 moreZeroes = (listSize == len(zeroesList))
 
             return "clear"
