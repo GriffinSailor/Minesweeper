@@ -21,6 +21,7 @@ class Board(Square):
             x = random.randrange(0, boardSize)
             y = random.randrange(0, boardSize)
             
+            # TODO: correct an issue where this is not properly blocking bomb placements
             # Ensure the first move is a 0 square to ensure a fair start to the game
             if (x,y) not in bombLocations and not (x == blockedX and y == blockedY) \
                 and not (x == blockedX + 1 and y == blockedY) and not (x == blockedX + 1 and y == blockedY + 1) \
@@ -80,45 +81,44 @@ class Board(Square):
             print ((" " * 2 if i < 10 else " ") + str(i + 1), end = "")
         print() 
     
-    # Reveal all squares around a sepcified coordinate and return a list of the ones that are 0 values
+    # Reveal all squares around a 0 Square, and branch out to reveal any other touching 0 Squares
     @staticmethod
     def revealBlock(self, x, y):
         # Add coordinates that touch the primary zero square
-        zeroSquares = [(x,y)]
-        if x + 1 <= self.boardSize:
-            zeroSquares.append(x + 1, y)
-        if x + 1 <= self.boardSize and y + 1 <= self.boardSize:
-            zeroSquares.append(x + 1, y + 1)
-        if x + 1 <= self.boardSize and y - 1 >= 0:
-            zeroSquares.append(x + 1, y - 1)
+        zeroSquares = list()
+        if x + 1 < self.boardSize:
+            zeroSquares.append((x + 1, y))
+        if x + 1 < self.boardSize and y + 1 < self.boardSize:
+            zeroSquares.append((x + 1, y + 1))
+        if x + 1 < self.boardSize and y - 1 >= 0:
+            zeroSquares.append((x + 1, y - 1))
         if x - 1 >= 0:
-            zeroSquares.append(x - 1, y)
-        if x - 1 >= 0 and y + 1 <= self.boardSize:
-            zeroSquares.append(x - 1, y + 1)
+            zeroSquares.append((x - 1, y))
+        if x - 1 >= 0 and y + 1 < self.boardSize:
+            zeroSquares.append((x - 1, y + 1))
         if x - 1 >= 0 and y - 1 >= 0:
-            zeroSquares.append(x - 1, y - 1)
+            zeroSquares.append((x - 1, y - 1))
         if y - 1 >= 0:
-            zeroSquares.append(x, y - 1)
-        if y + 1 <= self.boardSize:
-            zeroSquares.append(x, y + 1)
+            zeroSquares.append((x, y - 1))
+        if y + 1 < self.boardSize:
+            zeroSquares.append((x, y + 1))
 
         # Loop through the coordinates
-        list.remove[(x,y)]
         for cord in zeroSquares:
             self.board[cord[0]][cord[1]].revealed = True
             if self.board[cord[0]][cord[1]].value == 0:
                 # When hitting another zero, add the touching coordinates to the list without duplicating values
-                if (cord[0], cord[1] + 1) not in zeroSquares and cord[1] + 1 <= self.boardSize:
+                if (cord[0], cord[1] + 1) not in zeroSquares and cord[1] + 1 < self.boardSize:
                     zeroSquares.append((cord[0], cord[1] + 1))
                 if (cord[0], cord[1] - 1) not in zeroSquares and cord[1] - 1 >= 0:
                     zeroSquares.append((cord[0], cord[1] - 1))
-                if (cord[0] + 1, cord[1] + 1) not in zeroSquares and cord[1] + 1 <= self.boardSize and cord[0] + 1 <= self.boardSize:
+                if (cord[0] + 1, cord[1] + 1) not in zeroSquares and cord[1] + 1 < self.boardSize and cord[0] + 1 < self.boardSize:
                     zeroSquares.append((cord[0] + 1, cord[1] + 1))
-                if (cord[0] + 1, cord[1] - 1) not in zeroSquares and cord[1] - 1 >= 0 and cord[0] + 1 <= self.boardSize:
-                    zeroSquares.append((cord[0], cord[1] + 1))
-                if (cord[0] + 1, cord[1]) not in zeroSquares and cord[0] + 1 <= self.boardSize:
+                if (cord[0] + 1, cord[1] - 1) not in zeroSquares and cord[1] - 1 >= 0 and cord[0] + 1 < self.boardSize:
+                    zeroSquares.append((cord[0] + 1, cord[1] - 1))
+                if (cord[0] + 1, cord[1]) not in zeroSquares and cord[0] + 1 < self.boardSize:
                     zeroSquares.append((cord[0] + 1, cord[1]))
-                if (cord[0] - 1, cord[1] + 1) not in zeroSquares and cord[1] + 1 <= self.boardSize and cord[0] - 1 >= 0:
+                if (cord[0] - 1, cord[1] + 1) not in zeroSquares and cord[1] + 1 < self.boardSize and cord[0] - 1 >= 0:
                     zeroSquares.append((cord[0] - 1, cord[1] + 1))
                 if (cord[0] - 1, cord[1] - 1) not in zeroSquares and cord[1] - 1 >= 0 and cord[0] - 1 >= 0:
                     zeroSquares.append((cord[0] - 1, cord[1] - 1))
@@ -135,8 +135,6 @@ class Board(Square):
         elif self.board[col][row].value == 0:
             # Reveal all connecting 0 squares
             self.board[col][row].revealed = True
-            
-            # TODO: make sure this is working as intended
             self.revealBlock(self, col, row)
             return "clear"
         else:
