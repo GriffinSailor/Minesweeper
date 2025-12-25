@@ -6,3 +6,21 @@ class Square:
     def __init__(self, value, revealed):
         self.value = value
         self.revealed = revealed
+
+    def connectingSquares(x, y, connectedSquares):
+        # x - 1, y + 1
+        connectedSquares.append((x - 1, y + 1))
+        # x, y + 1
+        connectedSquares.append((x, y + 1))
+        # x + 1, y + 1
+        connectedSquares.append((x + 1, y + 1))
+        # x - 1, y
+        connectedSquares.append((x - 1, y))
+        # x + 1, y
+        connectedSquares.append((x + 1, y))
+        # x - 1, y - 1
+        connectedSquares.append((x - 1, y - 1))
+        # x, y - 1
+        connectedSquares.append((x, y - 1))
+        # x + 1, y - 1
+        connectedSquares.append((x + 1, y - 1))
