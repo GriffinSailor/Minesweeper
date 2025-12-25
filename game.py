@@ -50,10 +50,10 @@ class game (Board):
             gameBoard = game.makeFirstMove(10, 10, firstMove)
             gameBoard.printBoard()
         elif str(userIn) == "2":
-            gameBoard = game.makeFirstMove(40, 15, firstMove)
+            gameBoard = game.makeFirstMove(15, 40, firstMove)
             gameBoard.printBoard()
         elif str(userIn) == "3":
-            gameBoard = game.makeFirstMove(99, 24, firstMove)
+            gameBoard = game.makeFirstMove(24, 99, firstMove)
             gameBoard.printBoard()
         else:
             print("Invalid Input")

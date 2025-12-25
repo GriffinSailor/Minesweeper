@@ -21,14 +21,26 @@ class Board(Square):
             x = random.randrange(0, boardSize)
             y = random.randrange(0, boardSize)
             
-            # TODO: correct an issue where this is not properly blocking bomb placements
+            # TODO: correct an issue where this is not properly blocking bomb placements (this is still allowing a first selection of 1/2)
             # Ensure the first move is a 0 square to ensure a fair start to the game
-            if (x,y) not in bombLocations and not (x == blockedX and y == blockedY) \
-                and not (x == blockedX + 1 and y == blockedY) and not (x == blockedX + 1 and y == blockedY + 1) \
-                and not (x == blockedX + 1 and y == blockedY - 1) and not (x == blockedX and y == blockedY + 1) \
-                and not (x == blockedX - 1 and y == blockedY) and not (x == blockedX and y == blockedY - 1) \
-                and not (x == blockedX - 1 and y == blockedY + 1) and not (x == blockedX - 1 and y == blockedY - 1):
-                bombLocations.append(tuple((x, y)))
+            # x - 1, y + 1
+            # x, y + 1
+            # x + 1, y + 1
+            # x - 1, y
+            # x + 1, y
+            # x - 1, y - 1
+            # x, y - 1
+            # x + 1, y - 1
+            if (x,y) not in bombLocations \
+            and not (x == blockedX - 1 and y == blockedY + 1) \
+            and not (x == blockedX and y == blockedY + 1) \
+            and not (x == blockedX + 1 and y == blockedY + 1) \
+            and not (x == blockedX - 1 and y == blockedY) \
+            and not (x == blockedX + 1 and y == blockedY) \
+            and not (x == blockedX - 1 and y == blockedY - 1) \
+            and not (x == blockedX and y == blockedY - 1) \
+            and not (x == blockedX + 1 and y == blockedY - 1):
+                bombLocations.append((x, y))
 
         # Set the bomb locations
         for i in range (len(bombLocations)):
@@ -82,7 +94,7 @@ class Board(Square):
         print() 
     
     # Reveal all squares around a 0 Square, and branch out to reveal any other touching 0 Squares
-    @staticmethod
+    # TODO: correct issue where sometimes it seems to not reveal *every* zeroe square (seems to allow a square at the top of a block that stays hidden)
     def revealBlock(self, x, y):
         # Add coordinates that touch the primary zero square
         zeroSquares = list()
