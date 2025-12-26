@@ -9,7 +9,7 @@ class Board(Square):
         self.boardSize = boardSize
         self.board = []
         blockedSquares = list()
-        Square.connectingSquares(blockedX, blockedY, blockedSquares)
+        Square.connectingSquares(blockedY, blockedX, blockedSquares)
 
         # Initialize the board
         for i in range (boardSize):
@@ -17,6 +17,7 @@ class Board(Square):
             for k in range (boardSize):
                 self.board[i].append(Square(0, False))
 
+        # TODO: figure out why the first move still is not generating a protected space?
         # Determine the bomb locations
         bombLocations = []
         while len(bombLocations) != bombCount:
@@ -35,30 +36,13 @@ class Board(Square):
             self.board[y][x].value = 9
 
             # Increment the values of all squares touching the bomb
-            if x + 1 <= boardSize - 1:
-                if self.board[y][x + 1].value != 9:
-                    self.board[y][x + 1].value += 1
-                if y + 1 <= boardSize - 1:
-                    if self.board[y + 1][x + 1].value != 9:
-                        self.board[y + 1][x + 1].value += 1
-                if y - 1 >= 0:
-                    if self.board[y - 1][x + 1].value != 9:
-                        self.board[y - 1][x + 1].value += 1
-            if x - 1 >= 0:
-                if self.board[y][x - 1].value != 9:
-                    self.board[y][x - 1].value += 1
-                if y + 1 <= boardSize - 1:
-                    if self.board[y + 1][x - 1].value != 9:
-                        self.board[y + 1][x - 1].value += 1
-                if y - 1 >= 0:
-                    if self.board[y - 1][x - 1].value != 9:
-                        self.board[y - 1][x - 1].value += 1
-            if y - 1 >= 0:
-                if self.board[y - 1][x].value != 9:
-                    self.board[y - 1][x].value += 1
-            if y + 1 <= boardSize - 1:
-                if self.board[y + 1][x].value != 9:
-                    self.board[y + 1][x].value += 1
+            touchingBomb = list()
+            Square.connectingSquares(cordinate[0], cordinate[1], touchingBomb)
+            for cord in touchingBomb:
+                if cord[0] < boardSize and cord[0] >= 0 \
+                and cord[1] < boardSize and cord[1]:
+                    if self.board[cord[1]][cord[0]].value != 9:
+                        self.board[cord[1]][cord[0]].value += 1
 
     # Display the board to the user with appropriate square values
     def printBoard(self):
