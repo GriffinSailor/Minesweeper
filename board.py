@@ -84,8 +84,6 @@ class Board(Square):
         zeroSquares = list()
         Square.connectingSquares(x, y, zeroSquares)
 
-        # TODO: theres an issue in the logic here that is causing the list to get extended infinitely
-        # The issue is that it does not check for values to already be in the list. So its just cycling through the same squares infinitely
         # Loop through the coordinates
         for cord in zeroSquares:
             if cord[0] < self.boardSize and cord[0] >= 0 and cord[1] < self.boardSize and cord[1] >= 0:
