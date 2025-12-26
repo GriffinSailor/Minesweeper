@@ -79,12 +79,13 @@ class Board(Square):
         print() 
     
     # Reveal all squares around a 0 Square, and branch out to reveal any other touching 0 Squares
-    # TODO: correct issue where sometimes it seems to not reveal *every* zeroe square (seems to allow a square at the top of a block that stays hidden)
     def revealBlock(self, x, y):
         # Add coordinates that touch the primary zero square
         zeroSquares = list()
         Square.connectingSquares(x, y, zeroSquares)
 
+        # TODO: theres an issue in the logic here that is causing the list to get extended infinitely
+        # The issue is that it does not check for values to already be in the list. So its just cycling through the same squares infinitely
         # Loop through the coordinates
         for cord in zeroSquares:
             if cord[0] < self.boardSize and cord[0] >= 0 and cord[1] < self.boardSize and cord[1] >= 0:
