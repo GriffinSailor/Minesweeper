@@ -7,6 +7,9 @@ class Board(Square):
     def __init__(self, bombCount, boardSize, blockedX, blockedY):
         self.bombCount = bombCount
         self.boardSize = boardSize
+
+        # what row - 9 - and column - 0 - does the code see when selecting (1,1) when working correctly
+        # the column is the y and the row is the x
         self.board = []
         blockedSquares = list()
         Square.connectingSquares(blockedY, blockedX, blockedSquares)
@@ -17,7 +20,6 @@ class Board(Square):
             for k in range (boardSize):
                 self.board[i].append(Square(0, False))
 
-        # TODO: figure out why the first move still is not generating a protected space?
         # Determine the bomb locations
         bombLocations = []
         while len(bombLocations) != bombCount:
@@ -25,7 +27,7 @@ class Board(Square):
             y = random.randrange(0, boardSize)
             
             # Ensure the first move is a 0 square to ensure a fair start to the game
-            if (x,y) not in bombLocations and (x,y) not in blockedSquares:
+            if (x,y) not in bombLocations and (y,x) not in blockedSquares:
                 bombLocations.append((x, y))
 
         # Set the bomb locations
@@ -35,12 +37,13 @@ class Board(Square):
             y = cordinate[1]
             self.board[y][x].value = 9
 
+            # TODO: this doesnt seem to be incrementing properly, last test had 0 Squares right next to bombs
             # Increment the values of all squares touching the bomb
             touchingBomb = list()
-            Square.connectingSquares(cordinate[0], cordinate[1], touchingBomb)
+            Square.connectingSquares(cordinate[1], cordinate[0], touchingBomb)
             for cord in touchingBomb:
                 if cord[0] < boardSize and cord[0] >= 0 \
-                and cord[1] < boardSize and cord[1]:
+                and cord[1] < boardSize and cord[1] >= 0:
                     if self.board[cord[1]][cord[0]].value != 9:
                         self.board[cord[1]][cord[0]].value += 1
 

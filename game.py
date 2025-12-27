@@ -1,4 +1,5 @@
 from board import Board
+from square import Square
 
 class game (Board):
 
@@ -26,16 +27,17 @@ class game (Board):
                     print("Invalid move: Only enter one number for each row/column")
                 else:
                     try:
-                        x = int(move[0]) - 1
-                        y = boardSize - int(move[1])
-                        if x > boardSize or y > boardSize:
-                            print("Invalid move: Only enter numbers in the range of the board")
-                        else:
+                        x = int(move[0])
+                        y = int(move[1])
+                        # TODO: this function call isnt updating the variables in this scope. It calls and calcs properly, but these variables dont change
+                        if Square.squareCords(x, y, boardSize):
                             # Generate the board and move on from the first move
                             firstMove = False
-                            gameBoard = Board(bombCount, boardSize, y, x)
-                            gameBoard.pickSquare(y, x)
+                            gameBoard = Board(bombCount, boardSize, x, y)
+                            gameBoard.pickSquare(x, y)
                             return gameBoard
+                        else:
+                            print("Invalid move: Only enter numbers in the range of the board")
                     except ValueError:
                         print("Invalid move: Only enter numbers")
 
