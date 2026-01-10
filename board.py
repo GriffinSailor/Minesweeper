@@ -5,28 +5,28 @@ class Board(Square):
 
     # Extends a list of coordinates with those of the squares that touch the given row and column
     def connectingSquares(self, row, col, connectedSquares):
-        if (row - 1, col + 1) not in connectedSquares and row >= 0 and col < self.boardSize:
+        if (row - 1, col + 1) not in connectedSquares and row - 1 >= 0 and col + 1 < self.boardSize:
             connectedSquares.append((row - 1, col + 1))
 
-        if (row, col + 1) not in connectedSquares and col < self.boardSize:
+        if (row, col + 1) not in connectedSquares and col + 1 < self.boardSize:
             connectedSquares.append((row, col + 1))
 
-        if (row + 1, col + 1) not in connectedSquares and row < self.boardSize and col < self.boardSize:
+        if (row + 1, col + 1) not in connectedSquares and row + 1 < self.boardSize and col + 1 < self.boardSize:
             connectedSquares.append((row + 1, col + 1))
 
-        if (row - 1, col) not in connectedSquares and row >= 0:
+        if (row - 1, col) not in connectedSquares and row - 1 >= 0:
             connectedSquares.append((row - 1, col))
 
-        if (row + 1, col) not in connectedSquares and row < self.boardSize:
+        if (row + 1, col) not in connectedSquares and row + 1 < self.boardSize:
             connectedSquares.append((row + 1, col))
 
-        if (row - 1, col - 1) not in connectedSquares and row >= 0 and col >= 0:
+        if (row - 1, col - 1) not in connectedSquares and row - 1 >= 0 and col - 1 >= 0:
             connectedSquares.append((row - 1, col - 1))
 
-        if (row, col - 1) not in connectedSquares and col >= 0:
+        if (row, col - 1) not in connectedSquares and col - 1 >= 0:
             connectedSquares.append((row, col - 1))
 
-        if (row + 1, col - 1) not in connectedSquares and row < self.boardSize and col >= 0:
+        if (row + 1, col - 1) not in connectedSquares and row + 1 < self.boardSize and col - 1 >= 0:
             connectedSquares.append((row + 1, col - 1))
 
     # Display the board to the user
@@ -57,16 +57,18 @@ class Board(Square):
         elif self.board[row][col].value == 0:
             # Reveal all connecting 0 squares
             self.board[row][col].revealed = True
+            self.revealedSquares += 1
             zeroSquares = list()
-            self.board.connectingSquares(row, col, zeroSquares)
+            self.connectingSquares(row, col, zeroSquares)
 
             # Loop through the coordinates
             for cord in zeroSquares:
                 cordRow = cord[0]
                 cordCol = cord[1]
                 self.board[cordRow][cordCol].revealed = True
+                self.revealedSquares += 1
                 if self.board[cordRow][cordCol].value == 0:
-                    self.board.connectingSquares(cordRow, cordCol, zeroSquares) 
+                    self.connectingSquares(cordRow, cordCol, zeroSquares) 
             return "clear"
         else:
             self.board[row][col].revealed = True
@@ -76,6 +78,7 @@ class Board(Square):
     def __init__(self, bombCount, boardSize, blockedRow, blockedCol):
         self.bombCount = bombCount
         self.boardSize = boardSize
+        self.revealedSquares = 0
 
         self.board = []
         blockedSquares = list()
