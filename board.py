@@ -49,12 +49,12 @@ class Board(Square):
 
     # Reveal a square or a group of squares
     def pickSquare(self, row, col):
-        if self.board[row][col].value == 9:
+        if self.board[row][col].value == 9 and self.board[row][col].revealed == False:
             for i in range (self.boardSize):
                 for k in range (self.boardSize):
                     self.board[i][k].revealed = True
             return "bomb"
-        elif self.board[row][col].value == 0:
+        elif self.board[row][col].value == 0 and self.board[row][col].revealed == False:
             # Reveal all connecting 0 squares
             self.board[row][col].revealed = True
             self.revealedSquares += 1
@@ -65,13 +65,16 @@ class Board(Square):
             for cord in zeroSquares:
                 cordRow = cord[0]
                 cordCol = cord[1]
-                self.board[cordRow][cordCol].revealed = True
-                self.revealedSquares += 1
+                if self.board[cordRow][cordCol].revealed == False:
+                    self.board[cordRow][cordCol].revealed = True
+                    self.revealedSquares += 1
                 if self.board[cordRow][cordCol].value == 0:
                     self.connectingSquares(cordRow, cordCol, zeroSquares) 
             return "clear"
         else:
-            self.board[row][col].revealed = True
+            if self.board[row][col].revealed == False:
+                self.board[row][col].revealed = True
+                self.revealedSquares += 1
             return "clear"
         
     # Constructor that determines the boards difficulty and builds it

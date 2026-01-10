@@ -60,7 +60,7 @@ class game (Board):
             game.play()
 
         # Make moves
-        while not lostGame and (gameBoard.revealedSquares + gameBoard.bombCount) < gameBoard.boardSize * gameBoard.boardSize:
+        while not lostGame and (gameBoard.revealedSquares + gameBoard.bombCount) != gameBoard.boardSize * gameBoard.boardSize:
             userIn = input("Pick a square to try to reveal with the format 'x,y':\n")
             userIn = userIn.replace(" ", "",)
             move = userIn.split(",")
