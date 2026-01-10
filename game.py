@@ -1,5 +1,5 @@
 from board import Board
-from square import Square
+#from square import Square
 
 class game (Board):
 
@@ -79,15 +79,16 @@ class game (Board):
                             gameBoard.printBoard()
                         else:
                             gameBoard.printBoard()
-                            print("BOOM!!!\nYou Lose!")
+                            print(" \n" * 4 + "*" * (gameBoard.boardSize * 3))
+                            print("\nBOOM!!!\nYou Lose!\n\n\n")
                             lostGame = True
                 except ValueError:
                     print("Invalid move: Only enter numbers")
             
         # User Wins!
         if not lostGame:
-            print(" \n" * 4 + "*" * (gameBoard.boardSize * 3))
-            print("\nCONGRATULATIONS! YOU WIN!!!")
+            print("\n" * 4 + "*" * (gameBoard.boardSize * 3))
+            print("\nCONGRATULATIONS! YOU WIN!!!\n\n\n")
             
 # Play game!
 game.play()
