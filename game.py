@@ -27,14 +27,13 @@ class game (Board):
                     print("Invalid move: Only enter one number for each row/column")
                 else:
                     try:
-                        x = int(move[0])
-                        y = int(move[1])
-                        # TODO: this function call isnt updating the variables in this scope. It calls and calcs properly, but these variables dont change
-                        if Square.squareCords(x, y, boardSize):
+                        col = int(move[0]) - 1
+                        row = boardSize - int(move[1])
+                        if row >= 0 and row < boardSize and col >= 0 and col < boardSize:
                             # Generate the board and move on from the first move
                             firstMove = False
-                            gameBoard = Board(bombCount, boardSize, x, y)
-                            gameBoard.pickSquare(x, y)
+                            gameBoard = Board(bombCount, boardSize, row, col)
+                            gameBoard.pickSquare(row, col)
                             return gameBoard
                         else:
                             print("Invalid move: Only enter numbers in the range of the board")
@@ -61,6 +60,7 @@ class game (Board):
             print("Invalid Input")
             game.play()
 
+        # TODO: implement a tracker to give a game over when the user has won
         # Make moves
         while activeGame:
             userIn = input("Pick a square to try to reveal with the format 'x,y':\n")
@@ -70,13 +70,13 @@ class game (Board):
                 print("Invalid move: Only enter one number for each row/column")
             else:
                 try:
-                    x = int(move[0]) - 1
-                    y = gameBoard.boardSize - int(move[1])
-                    if x > gameBoard.boardSize or y > gameBoard.boardSize:
+                    col = int(move[0]) - 1
+                    row = gameBoard.boardSize - int(move[1])
+                    if row >= 0 and row < gameBoard.boardSize and col >= 0 and col < gameBoard.boardSize:
                         print("Invalid move: Only enter numbers in the range of the board")
                     else:
                         # Passed input sanitization, make the move and verify if it ended the game
-                        if gameBoard.pickSquare(y, x) == "clear":
+                        if gameBoard.pickSquare(row, col) == "clear":
                             gameBoard.printBoard()
                         else:
                             gameBoard.printBoard()

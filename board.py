@@ -3,18 +3,85 @@ import random
 
 class Board(Square):
 
+    # Extends a list of coordinates with those of the squares that touch the given row and column
+    def connectingSquares(self, row, col, connectedSquares):
+        if (row - 1, col + 1) not in connectedSquares and row >= 0 and col < self.boardSize:
+            connectedSquares.append((row - 1, col + 1))
+
+        if (row, col + 1) not in connectedSquares and col < self.boardSize:
+            connectedSquares.append((row, col + 1))
+
+        if (row + 1, col + 1) not in connectedSquares and row < self.boardSize and col < self.boardSize:
+            connectedSquares.append((row + 1, col + 1))
+
+        if (row - 1, col) not in connectedSquares and row >= 0:
+            connectedSquares.append((row - 1, col))
+
+        if (row + 1, col) not in connectedSquares and row < self.boardSize:
+            connectedSquares.append((row + 1, col))
+
+        if (row - 1, col - 1) not in connectedSquares and row >= 0 and col >= 0:
+            connectedSquares.append((row - 1, col - 1))
+
+        if (row, col - 1) not in connectedSquares and col >= 0:
+            connectedSquares.append((row, col - 1))
+
+        if (row + 1, col - 1) not in connectedSquares and row < self.boardSize and col >= 0:
+            connectedSquares.append((row + 1, col - 1))
+
+    # Display the board to the user
+    def printBoard(self):
+        print()
+        for row in range (len(self.board)):
+            print(str(self.boardSize - row) + ("|" if self.boardSize - row > 9 else " |") + " " * 2 , end = "")
+            for col in range (len(self.board)):
+                if self.board[row][col].revealed == False:
+                    print("x" + " " * 2, end = "")
+                else:
+                    print(str(self.board[row][col].value ) + " " * 2, end = "")
+            print()
+        
+        print(" " * 4 + "_" * (self.boardSize * 3))
+        print(" " * 3, end = "")
+        for i in range (self.boardSize):
+            print ((" " * 2 if i < 10 else " ") + str(i + 1), end = "")
+        print() 
+
+    # Reveal a square or a group of squares
+    def pickSquare(self, row, col):
+        if self.board[row][col].value == 9:
+            for i in range (self.boardSize):
+                for k in range (self.boardSize):
+                    self.board[i][k].revealed = True
+            return "bomb"
+        elif self.board[row][col].value == 0:
+            # Reveal all connecting 0 squares
+            self.board[row][col].revealed = True
+            zeroSquares = list()
+            self.board.connectingSquares(row, col, zeroSquares)
+
+            # Loop through the coordinates
+            for cord in zeroSquares:
+                cordRow = cord[0]
+                cordCol = cord[1]
+                self.board[cordRow][cordCol].revealed = True
+                if self.board[cordRow][cordCol].value == 0:
+                    self.board.connectingSquares(cordRow, cordCol, zeroSquares) 
+            return "clear"
+        else:
+            self.board[row][col].revealed = True
+            return "clear"
+        
     # Constructor that determines the boards difficulty and builds it
-    def __init__(self, bombCount, boardSize, blockedX, blockedY):
+    def __init__(self, bombCount, boardSize, blockedRow, blockedCol):
         self.bombCount = bombCount
         self.boardSize = boardSize
 
-        # what row - 9 - and column - 0 - does the code see when selecting (1,1) when working correctly
-        # the column is the y and the row is the x
         self.board = []
         blockedSquares = list()
-        Square.connectingSquares(blockedY, blockedX, blockedSquares)
+        self.connectingSquares(blockedRow, blockedCol, blockedSquares)
 
-        # Initialize the board
+        # Initialize the board as a 2D array
         for i in range (boardSize):
             self.board.append([])
             for k in range (boardSize):
@@ -23,73 +90,23 @@ class Board(Square):
         # Determine the bomb locations
         bombLocations = []
         while len(bombLocations) != bombCount:
-            x = random.randrange(0, boardSize)
-            y = random.randrange(0, boardSize)
+            row = random.randrange(0, boardSize)
+            col = random.randrange(0, boardSize)
             
             # Ensure the first move is a 0 square to ensure a fair start to the game
-            if (x,y) not in bombLocations and (y,x) not in blockedSquares:
-                bombLocations.append((x, y))
+            if (row, col) not in bombLocations and (row, col) not in blockedSquares:
+                bombLocations.append((row, col))
 
-        # Set the bomb locations
+        # Set the bomb locations and increment local square values
         for i in range (len(bombLocations)):
             cordinate = bombLocations[i]
-            x = cordinate[0]
-            y = cordinate[1]
-            self.board[y][x].value = 9
+            row = cordinate[0]
+            col = cordinate[1]
+            self.board[row][col].value = 9
 
-            # TODO: this doesnt seem to be incrementing properly, last test had 0 Squares right next to bombs
             # Increment the values of all squares touching the bomb
             touchingBomb = list()
-            Square.connectingSquares(cordinate[1], cordinate[0], touchingBomb)
+            self.connectingSquares(row, col, touchingBomb)
             for cord in touchingBomb:
-                if cord[0] < boardSize and cord[0] >= 0 \
-                and cord[1] < boardSize and cord[1] >= 0:
-                    if self.board[cord[1]][cord[0]].value != 9:
-                        self.board[cord[1]][cord[0]].value += 1
-
-    # Display the board to the user with appropriate square values
-    def printBoard(self):
-        print()
-        for i in range (len(self.board)):
-            print(str(self.boardSize - i) + ("|" if self.boardSize - i > 9 else " |") + " " * 2 , end = "")
-            for k in range (len(self.board)):
-                if self.board[i][k].revealed == False:
-                    print("x" + " " * 2, end = "")
-                else:
-                    print(str(self.board[i][k].value ) + " " * 2, end = "")
-            print()
-        
-        print(" " * 4 + "_" * (self.boardSize * 3))
-        print(" " * 3, end = "")
-        for i in range (self.boardSize):
-            print ((" " * 2 if i < 10 else " ") + str(i + 1), end = "")
-        print() 
-    
-    # Reveal all squares around a 0 Square, and branch out to reveal any other touching 0 Squares
-    def revealBlock(self, x, y):
-        # Add coordinates that touch the primary zero square
-        zeroSquares = list()
-        Square.connectingSquares(x, y, zeroSquares)
-
-        # Loop through the coordinates
-        for cord in zeroSquares:
-            if cord[0] < self.boardSize and cord[0] >= 0 and cord[1] < self.boardSize and cord[1] >= 0:
-                self.board[cord[0]][cord[1]].revealed = True
-                if self.board[cord[0]][cord[1]].value == 0:
-                    Square.connectingSquares(cord[0], cord[1], zeroSquares)
-
-    # Select a square to expose
-    def pickSquare(self, col, row):
-        if self.board[col][row].value == 9:
-            for i in range (self.boardSize):
-                for k in range (self.boardSize):
-                    self.board[i][k].revealed = True
-            return "bomb"
-        elif self.board[col][row].value == 0:
-            # Reveal all connecting 0 squares
-            self.board[col][row].revealed = True
-            self.revealBlock(col, row)
-            return "clear"
-        else:
-            self.board[col][row].revealed = True
-            return "clear"
+                if self.board[cord[0]][cord[1]].value != 9:
+                    self.board[cord[0]][cord[1]].value += 1

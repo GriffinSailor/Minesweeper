@@ -7,40 +7,13 @@ class Square:
         self.value = value
         self.revealed = revealed
 
-    # Pass in the user selected x/y values, and map them to the proper values for the board array
+    # Pass in the user selected column and row values, and map them to the proper values for the board array
     # Returns true for a valid move and false for an invalid one
-    def squareCords(x, y, boardSize):
-        x = x- 1
-        y = boardSize - y
+    def transCords(col, row, boardSize):
+        col = col - 1
+        row = boardSize - row
 
-        if x >= 0 and x< boardSize and y >= 0 and y < boardSize:
+        if col >= 0 and col < boardSize and row >= 0 and row < boardSize:
             return True
         else:
             return False
-
-    # Extends a list of coordinates with those of the squares that touch the given x and y values
-    def connectingSquares(x, y, connectedSquares):
-        # x - 1, y + 1
-        if (x - 1, y + 1) not in connectedSquares:
-            connectedSquares.append((x - 1, y + 1))
-        # x, y + 1
-        if (x, y + 1) not in connectedSquares:
-            connectedSquares.append((x, y + 1))
-        # x + 1, y + 1
-        if (x + 1, y + 1) not in connectedSquares:
-            connectedSquares.append((x + 1, y + 1))
-        # x - 1, y
-        if (x - 1, y) not in connectedSquares:
-            connectedSquares.append((x - 1, y))
-        # x + 1, y
-        if (x + 1, y) not in connectedSquares:
-            connectedSquares.append((x + 1, y))
-        # x - 1, y - 1
-        if (x - 1, y - 1) not in connectedSquares:
-            connectedSquares.append((x - 1, y - 1))
-        # x, y - 1
-        if (x, y - 1) not in connectedSquares:
-            connectedSquares.append((x, y - 1))
-        # x + 1, y - 1
-        if (x + 1, y - 1) not in connectedSquares:
-            connectedSquares.append((x + 1, y - 1))
