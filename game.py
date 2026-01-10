@@ -1,5 +1,4 @@
 from board import Board
-#from square import Square
 
 class game (Board):
 
@@ -45,7 +44,7 @@ class game (Board):
         lostGame = False
         firstMove = True
 
-        # Create the board
+        # Create a safe first move for the user and return the board at the wanted difficulty
         userIn = input("What difficulty would you prefer?\n1. Easy\n2. Medium\n3. Hard\n")
         if str(userIn) == "1":
             gameBoard = game.makeFirstMove(10, 10, firstMove)
@@ -79,16 +78,18 @@ class game (Board):
                             gameBoard.printBoard()
                         else:
                             gameBoard.printBoard()
-                            print(" \n" * 4 + "*" * (gameBoard.boardSize * 3))
-                            print("\nBOOM!!!\nYou Lose!\n\n\n")
+                            print("\n" * 4 + "*" * 30)
+                            print("BOOM!!!\nYou Lose!")
+                            print("*" * 30)
                             lostGame = True
                 except ValueError:
                     print("Invalid move: Only enter numbers")
             
         # User Wins!
         if not lostGame:
-            print("\n" * 4 + "*" * (gameBoard.boardSize * 3))
-            print("\nCONGRATULATIONS! YOU WIN!!!\n\n\n")
+            print("\n" * 4 + "*" * 30)
+            print("CONGRATULATIONS! YOU WIN!!!")
+            print("*" * 30)
             
 # Play game!
 game.play()
