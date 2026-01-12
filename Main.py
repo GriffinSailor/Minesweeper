@@ -1,6 +1,6 @@
-from board import Board
+from Board import Board
 
-class game (Board):
+class Main (Board):
 
     # Collect the users first move and generate the board afterwards to ensure a fair start
     def makeFirstMove(boardSize, bombCount, firstMove):
@@ -47,17 +47,17 @@ class game (Board):
         # Create a safe first move for the user and return the board at the wanted difficulty
         userIn = input("What difficulty would you prefer?\n1. Easy\n2. Medium\n3. Hard\n")
         if str(userIn) == "1":
-            gameBoard = game.makeFirstMove(10, 10, firstMove)
+            gameBoard = Main.makeFirstMove(10, 10, firstMove)
             gameBoard.printBoard()
         elif str(userIn) == "2":
-            gameBoard = game.makeFirstMove(15, 40, firstMove)
+            gameBoard = Main.makeFirstMove(15, 40, firstMove)
             gameBoard.printBoard()
         elif str(userIn) == "3":
-            gameBoard = game.makeFirstMove(24, 99, firstMove)
+            gameBoard = Main.makeFirstMove(24, 99, firstMove)
             gameBoard.printBoard()
         else:
             print("Invalid Input")
-            game.play()
+            Main.play()
 
         # Make moves
         while not lostGame and (gameBoard.revealedSquares + gameBoard.bombCount) != gameBoard.boardSize * gameBoard.boardSize:
@@ -92,4 +92,4 @@ class game (Board):
             print("*" * 30)
             
 # Play game!
-game.play()
+Main.play()

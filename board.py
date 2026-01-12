@@ -1,4 +1,4 @@
-from square import Square
+from Square import Square
 import random
 
 class Board(Square):
